@@ -33,3 +33,6 @@ bo3 :: Partie
 bo3 = Partie (Herausforderung cheJsa nosCsm) [cheJsaSpiel, cheJsaSpiel]
 bo5 :: Partie
 bo5 = Partie (Herausforderung cheJsa nosCsm) [nosCsmSpiel, nosCsmSpiel, cheJsaSpiel, nosCsmSpiel]
+
+tore :: [Tor]
+tore = [Gruen janis, Gruen christoph, Schwarz norbert]

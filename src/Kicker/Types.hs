@@ -38,3 +38,5 @@ data Herausforderung =
   }
 
 data Partie = Partie Herausforderung [Spiel]
+
+data Tor = Gruen Spieler | Schwarz Spieler
