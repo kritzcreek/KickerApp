@@ -4,23 +4,29 @@ import Kicker.Types
 import Control.Applicative
 import Control.Monad.State
 
-type LaufendesSpiel = State Resultat
+--type LaufendesSpiel = StateT Resultat
 type Torschuetze = Spieler
 
-spielAuswerten ::Herausforderung -> [Tor] -> (Spiel, [Torschuetze])
-spielAuswerten (Herausforderung h g) ts =
-  (Spiel h g res, torschuetzen)
-  where (torschuetzen, res) = runState spielverlauf neuesSpiel
-        spielverlauf :: LaufendesSpiel [Torschuetze]
+spielAuswerten ::Herausforderung -> [Tor] -> IO (Spiel, [Torschuetze])
+spielAuswerten (Herausforderung h g) ts = do
+  (torschuetzen, res) <- runStateT spielverlauf neuesSpiel
+  return $ (,) (Spiel h g res) torschuetzen
+  where
+        spielverlauf :: StateT Resultat IO [Torschuetze]
         spielverlauf = sequence (torVerarbeiten <$> ts)
         neuesSpiel = Resultat 0 0
 
-torVerarbeiten ::Tor -> LaufendesSpiel Torschuetze
+kommentator :: String -> String
+kommentator ts = ts ++ " könnte schießen, " ++ ts ++ " schießt... TOOOOOOOOOOR!"
+
+torVerarbeiten ::Tor -> StateT Resultat IO Torschuetze
 torVerarbeiten (Gruen ts) = do
   bisher <- get
+  lift $ putStrLn (kommentator (name ts))
   put bisher {toreGruen = toreGruen bisher + 1}
   return ts
 torVerarbeiten (Schwarz ts) = do
   bisher <- get
+  lift $ putStrLn (kommentator (name ts))
   put bisher {toreSchwarz = toreSchwarz bisher + 1}
   return ts

@@ -36,3 +36,6 @@ bo5 = Partie (Herausforderung cheJsa nosCsm) [nosCsmSpiel, nosCsmSpiel, cheJsaSp
 
 tore :: [Tor]
 tore = [Gruen janis, Gruen christoph, Schwarz norbert]
+
+herausforderung :: Herausforderung
+herausforderung = Herausforderung cheJsa nosCsm
