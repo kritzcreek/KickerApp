@@ -20,9 +20,9 @@ nosCsm :: Teilnehmer
 nosCsm = Team (norbert, christian) (Just wertung)
 
 cheJsaResult :: Resultat
-cheJsaResult = Resultat cheJsa 7 5
+cheJsaResult = Resultat 7 5
 nosCsmResult :: Resultat
-nosCsmResult = Resultat nosCsm 8 5
+nosCsmResult = Resultat 8 5
 
 cheJsaSpiel :: Spiel
 cheJsaSpiel = Spiel {gruen = cheJsa, schwarz = nosCsm, resultat = cheJsaResult}
@@ -30,6 +30,6 @@ nosCsmSpiel :: Spiel
 nosCsmSpiel = Spiel {gruen = nosCsm, schwarz = cheJsa, resultat = nosCsmResult}
 
 bo3 :: Partie
-bo3 = Partie [cheJsaSpiel, cheJsaSpiel]
+bo3 = Partie (Herausforderung cheJsa nosCsm) [cheJsaSpiel, cheJsaSpiel]
 bo5 :: Partie
-bo5 = Partie [nosCsmSpiel, nosCsmSpiel, cheJsaSpiel, nosCsmSpiel]
+bo5 = Partie (Herausforderung cheJsa nosCsm) [nosCsmSpiel, nosCsmSpiel, cheJsaSpiel, nosCsmSpiel]

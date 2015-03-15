@@ -1,27 +1,40 @@
 module Kicker where
 
 import Kicker.Types
+import Control.Applicative
 
 spieleInPartie :: Partie -> Int
-spieleInPartie (Partie p) = length p
+spieleInPartie (Partie _ spiele) = length spiele
+
+toreInSpiel :: Teilnehmer -> Spiel -> Int
+toreInSpiel t s | gruen s   == t = toreGruen (resultat s)
+                | schwarz s == t = toreSchwarz (resultat s)
+                | otherwise = 0
 
 -- Nothing steht hier für Unentschieden
+spielGewinner :: Spiel -> Maybe Teilnehmer
+spielGewinner s | toreG > toreS = Just (gruen s)
+                | toreG < toreS = Just (schwarz s)
+                | otherwise = Nothing
+  where toreG = toreInSpiel (gruen s) s
+        toreS = toreInSpiel (schwarz s) s
+
+
 partieGewinner :: Partie -> Maybe Teilnehmer
-partieGewinner (Partie []) = Nothing
-partieGewinner (Partie spiele@(s:_)) | t1 > t2 = Just (gruen s)
-                                     | t2 > t1 = Just (schwarz s)
-                                     | otherwise = Nothing
-  where gewonneneSpiele t = filter ((t ==) . gewinner . resultat) spiele
-        t1 = length $ gewonneneSpiele (gruen s)
-        t2 = length $ gewonneneSpiele (schwarz s)
+partieGewinner (Partie _ []) = Nothing
+partieGewinner (Partie h spiele)
+  | erg > 0 = Just (herausforderer h)
+  | erg < 0 = Just (gegner h)
+  | otherwise = Nothing
+  where
+    siegerNachInt :: Teilnehmer -> Int
+    siegerNachInt = \t -> if t == herausforderer h then 1 else -1
+    erg = sum $ (maybe 0 siegerNachInt) <$> (spielGewinner <$> spiele)
+
 
 toreInPartie :: Partie -> (Int, Int)
-toreInPartie (Partie []) = (0, 0)
-toreInPartie (Partie spiele@(s:_)) = (tore t1, tore t2)
+toreInPartie (Partie _ []) = (0, 0)
+toreInPartie (Partie h spiele) = (tore (herausforderer h), tore (gegner h))
   where
-    t1 = gruen s
-    t2 = schwarz s
     tore :: Teilnehmer -> Int
-    tore t = toreAlsGruen t + toreAlsSchwarz t
-    toreAlsGruen t =   sum $ map (toreGruen . resultat) (filter ((t ==) .  gruen) spiele)
-    toreAlsSchwarz t = sum $ map (toreSchwarz . resultat) (filter ((t ==) . schwarz) spiele)
+    tore = \ teilnehmer -> sum $ map (toreInSpiel teilnehmer) spiele
