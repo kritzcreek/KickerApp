@@ -30,9 +30,9 @@ nosCsmSpiel :: Spiel
 nosCsmSpiel = Spiel {gruen = nosCsm, schwarz = cheJsa, resultat = nosCsmResult}
 
 bo3 :: Partie
-bo3 = Partie (Herausforderung cheJsa nosCsm) [cheJsaSpiel, cheJsaSpiel]
+bo3 = Partie herausforderung [cheJsaSpiel, cheJsaSpiel]
 bo5 :: Partie
-bo5 = Partie (Herausforderung cheJsa nosCsm) [nosCsmSpiel, nosCsmSpiel, cheJsaSpiel, nosCsmSpiel]
+bo5 = Partie herausforderung [nosCsmSpiel, nosCsmSpiel, cheJsaSpiel, nosCsmSpiel]
 
 tore :: [Tor]
 tore = [Gruen janis, Gruen christoph, Schwarz norbert]

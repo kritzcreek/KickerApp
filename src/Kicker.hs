@@ -37,4 +37,4 @@ toreInPartie (Partie _ []) = (0, 0)
 toreInPartie (Partie h spiele) = (tore (herausforderer h), tore (gegner h))
   where
     tore :: Teilnehmer -> Int
-    tore = \ teilnehmer -> sum $ map (toreInSpiel teilnehmer) spiele
+    tore = \ teilnehmer -> sum $ (toreInSpiel teilnehmer) <$> spiele
