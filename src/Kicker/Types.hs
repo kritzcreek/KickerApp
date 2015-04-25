@@ -28,8 +28,16 @@ data Spiel =
   Spiel {
     gruen    :: Teilnehmer,
     schwarz  :: Teilnehmer,
+    gruenBelegung :: Belegung,
+    schwarzBelegung :: Belegung,
     resultat :: Resultat
   } deriving (Show, Eq)
+
+data Belegung =
+  Belegung {
+    vorne :: Spieler,
+    hinten :: Spieler
+  } deriving(Show, Eq)
 
 data Herausforderung =
   Herausforderung  {

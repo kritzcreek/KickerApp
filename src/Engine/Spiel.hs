@@ -7,10 +7,10 @@ import Control.Monad.State
 type LaufendesSpiel = StateT Resultat IO
 type Torschuetze = Spieler
 
-spielAuswerten ::Herausforderung -> [Tor] -> IO (Spiel, [Torschuetze])
-spielAuswerten (Herausforderung h g) ts = do
+spielAuswerten ::Herausforderung -> Belegung -> Belegung -> [Tor] -> IO (Spiel, [Torschuetze])
+spielAuswerten (Herausforderung h g) bg bs ts  = do
   (torschuetzen, res) <- runStateT spielverlauf neuesSpiel
-  return $ (,) (Spiel h g res) torschuetzen
+  return $ (,) (Spiel h g bg bs res) torschuetzen
   where spielverlauf :: LaufendesSpiel [Torschuetze]
         spielverlauf = sequence (torVerarbeiten <$> ts)
         neuesSpiel = Resultat 0 0
