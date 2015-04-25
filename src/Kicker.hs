@@ -1,7 +1,7 @@
 module Kicker where
 
-import Kicker.Types
-import Control.Applicative
+import           Control.Applicative
+import           Kicker.Types
 
 spieleInPartie :: Partie -> Int
 spieleInPartie (Partie _ spiele) = length spiele
@@ -28,8 +28,8 @@ partieGewinner (Partie h spiele)
   | otherwise = Nothing
   where
     siegerNachInt :: Teilnehmer -> Int
-    siegerNachInt = \t -> if t == herausforderer h then 1 else -1
-    erg = sum $ (maybe 0 siegerNachInt) <$> (spielGewinner <$> spiele)
+    siegerNachInt t = if t == herausforderer h then 1 else -1
+    erg = sum $ maybe 0 siegerNachInt <$> (spielGewinner <$> spiele)
 
 
 toreInPartie :: Partie -> (Int, Int)
@@ -37,4 +37,4 @@ toreInPartie (Partie _ []) = (0, 0)
 toreInPartie (Partie h spiele) = (tore (herausforderer h), tore (gegner h))
   where
     tore :: Teilnehmer -> Int
-    tore = \ teilnehmer -> sum $ (toreInSpiel teilnehmer) <$> spiele
+    tore teilnehmer = sum $ map (toreInSpiel teilnehmer) spiele
