@@ -1,10 +1,23 @@
 -- | Main entry point to the application.
 module Main where
 
-import Kicker
-import Kicker.Types (name)
-import Kicker.Dummy
-import Engine.Spiel
+import           Control.Applicative ((<$>))
+import           Control.Monad       (unless)
+import           Engine.Spiel
+import           Kicker
+import           Kicker.Dummy
+import           Kicker.Types
+import           Pipes
+import           System.IO           (isEOF)
+
+
+goalProducer :: Producer Tor IO ()
+goalProducer = do
+  eof <- lift isEOF
+  unless eof $ do
+    s <- lift (parseTor <$> getLine)
+    yield s
+    goalProducer
 
 -- | The main entry point.
 main :: IO ()

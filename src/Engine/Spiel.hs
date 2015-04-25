@@ -1,8 +1,8 @@
 module Engine.Spiel where
 
-import Kicker.Types
-import Control.Applicative
-import Control.Monad.State
+import           Control.Applicative
+import           Control.Monad.State
+import           Kicker.Types
 
 --type LaufendesSpiel = StateT Resultat
 type Torschuetze = Spieler
@@ -12,9 +12,9 @@ spielAuswerten (Herausforderung h g) ts = do
   (torschuetzen, res) <- runStateT spielverlauf neuesSpiel
   return $ (,) (Spiel h g res) torschuetzen
   where
-        spielverlauf :: StateT Resultat IO [Torschuetze]
-        spielverlauf = sequence (torVerarbeiten <$> ts)
-        neuesSpiel = Resultat 0 0
+   spielverlauf :: StateT Resultat IO [Torschuetze]
+   spielverlauf = sequence (torVerarbeiten <$> ts)
+   neuesSpiel = Resultat 0 0
 
 kommentator :: String -> String
 kommentator ts = ts ++ " könnte schießen, " ++ ts ++ " schießt... TOOOOOOOOOOR!"

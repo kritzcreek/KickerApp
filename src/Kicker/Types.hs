@@ -34,9 +34,17 @@ data Spiel =
 data Herausforderung =
   Herausforderung  {
     herausforderer :: Teilnehmer,
-    gegner :: Teilnehmer
+    gegner         :: Teilnehmer
   }
 
 data Partie = Partie Herausforderung [Spiel]
 
 data Tor = Gruen Spieler | Schwarz Spieler
+
+parseTor :: String -> Tor
+parseTor str = farbe spieler
+  where [f,s] = words str
+        farbe = if f == "g"
+                then Gruen
+                else Schwarz
+        spieler = Spieler s
