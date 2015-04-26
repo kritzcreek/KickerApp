@@ -27,27 +27,27 @@ mmuTpe = Team (marvin, tom) Nothing
 
 
 cheJsaResult :: Resultat
-cheJsaResult = Resultat 7 5
+cheJsaResult = Resultat 7 5 []
 nosCsmResult :: Resultat
-nosCsmResult = Resultat 8 5
+nosCsmResult = Resultat 8 5 []
 
 cheJsaSpiel :: Spiel
 cheJsaSpiel =
   Spiel {
-    gruen = cheJsa,
-    schwarz = nosCsm,
-    gruenBelegung = Belegung {vorne=christoph, hinten=janis},
-    schwarzBelegung = Belegung {vorne=norbert, hinten=christian},
-    resultat = cheJsaResult
+    _gruen = cheJsa,
+    _schwarz = nosCsm,
+    _gruenBelegung = Belegung {_vorne=christoph, _hinten=janis},
+    _schwarzBelegung = Belegung {_vorne=norbert, _hinten=christian},
+    _resultat = cheJsaResult
     }
 nosCsmSpiel :: Spiel
 nosCsmSpiel =
   Spiel {
-    gruen = nosCsm,
-    schwarz = cheJsa,
-    gruenBelegung = Belegung {vorne=christoph, hinten=janis},
-    schwarzBelegung = Belegung {vorne=norbert, hinten=christian},
-    resultat = nosCsmResult}
+    _gruen = nosCsm,
+    _schwarz = cheJsa,
+    _gruenBelegung = Belegung {_vorne=christoph, _hinten=janis},
+    _schwarzBelegung = Belegung {_vorne=norbert, _hinten=christian},
+    _resultat = nosCsmResult}
 
 bo3 :: Partie
 bo3 = Partie herausforderung [cheJsaSpiel, cheJsaSpiel]
@@ -55,7 +55,7 @@ bo5 :: Partie
 bo5 = Partie herausforderung [nosCsmSpiel, nosCsmSpiel, cheJsaSpiel, nosCsmSpiel]
 
 tore :: [Tor]
-tore = [Gruen janis, Gruen christoph, Schwarz norbert]
+tore = [Tor janis, Tor christoph, Tor norbert]
 
 herausforderung :: Herausforderung
 herausforderung = Herausforderung cheJsa nosCsm

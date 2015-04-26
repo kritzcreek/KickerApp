@@ -1,22 +1,30 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Kicker.Types where
+
+import Control.Lens
+
+data Farbe = Gruen | Schwarz deriving (Show, Eq)
+data Position = Vorne | Hinten deriving (Show, Eq)
+data Tor = Tor Spieler deriving (Show, Eq)
 
 data Resultat =
   Resultat {
-    toreGruen   :: Int,
-    toreSchwarz :: Int
+    _toreGruen   :: Int,
+    _toreSchwarz :: Int,
+    _torListe    :: [Tor]
     } deriving (Show, Eq)
 
 data TeilnehmerWertung =
   TeilnehmerWertung {
-    elo       :: Int,
-    vorneElo  :: Int,
-    hintenElo :: Int
+    _elo       :: Int,
+    _vorneElo  :: Int,
+    _hintenElo :: Int
     } deriving(Show, Eq)
 
 data Spieler =
   Spieler {
-    name :: String
+    _name :: String
     } deriving(Show, Eq)
 
 data Teilnehmer where
@@ -26,33 +34,54 @@ data Teilnehmer where
 
 data Spiel =
   Spiel {
-    gruen    :: Teilnehmer,
-    schwarz  :: Teilnehmer,
-    gruenBelegung :: Belegung,
-    schwarzBelegung :: Belegung,
-    resultat :: Resultat
+    _gruen           :: Teilnehmer,
+    _schwarz         :: Teilnehmer,
+    _gruenBelegung   :: Belegung,
+    _schwarzBelegung :: Belegung,
+    _resultat        :: Resultat
   } deriving (Show, Eq)
 
 data Belegung =
   Belegung {
-    vorne :: Spieler,
-    hinten :: Spieler
+    _vorne  :: Spieler,
+    _hinten :: Spieler
   } deriving(Show, Eq)
 
 data Herausforderung =
   Herausforderung  {
-    herausforderer :: Teilnehmer,
-    gegner         :: Teilnehmer
+    _herausforderer :: Teilnehmer,
+    _gegner         :: Teilnehmer
   }
 
 data Partie = Partie Herausforderung [Spiel]
 
-data Tor = Gruen Spieler | Schwarz Spieler
-
 parseTor :: String -> Tor
-parseTor str = farbe spieler
-  where [f,s] = words str
-        farbe = if f == "g"
-                then Gruen
-                else Schwarz
-        spieler = Spieler s
+parseTor str = Tor (Spieler str)
+
+neuesResultat :: Resultat
+neuesResultat = Resultat 0 0 []
+
+-- | API Wunsch:
+-- | Neue Herausforderung
+-- | Akzeptieren
+-- | Neues Spiel (Belegung)
+-- | Tor
+-- | Spiel Beenden
+
+data SpielEvent =
+  TorEvent Spieler
+  | Switcharoo Farbe
+  | SpielEnde
+
+data HerausforderungEvent =
+  NeueHerausforderung Herausforderung
+  | Akzeptieren Herausforderung
+  | NeuesSpiel Teilnehmer Belegung Teilnehmer Belegung
+  | HerausforderungBeenden
+
+makeLenses ''Resultat
+makeLenses ''TeilnehmerWertung
+makeLenses ''Spieler
+makeLenses ''Herausforderung
+makeLenses ''Belegung
+makeLenses ''Spiel
